@@ -1,12 +1,27 @@
-import React from 'react'
-import styled from 'styled-components'
-import { formatPrice } from '../utils/helpers'
-import { FaSearch } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import React from "react";
+import styled from "styled-components";
+import { formatPrice } from "../utils/helpers";
+import { FaSearch } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-const Product = () => {
-  return <h4>product</h4>
-}
+const Product = ({ id, name, price, image }) => {
+  return (
+    <Wrapper>
+      <div className="container">
+        {/* <img src={image} alt="sxz" /> */}
+        <img src={image} alt={name} />
+        {/* we can use template literal in react only inside{} */}
+        <Link to={`/products/${id}`} className="link">
+          <FaSearch />
+        </Link>
+      </div>
+      <footer>
+        <h5>{name}</h5>
+        <h5>{price}</h5>
+      </footer>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.article`
   .container {
@@ -41,6 +56,7 @@ const Wrapper = styled.article`
       color: var(--clr-white);
     }
   }
+  /* our hover effect */
   .container:hover img {
     opacity: 0.5;
   }
@@ -63,5 +79,5 @@ const Wrapper = styled.article`
     color: var(--clr-primary-5);
     letter-spacing: var(--spacing);
   }
-`
-export default Product
+`;
+export default Product;

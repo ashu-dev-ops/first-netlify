@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
-import { useProductsContext } from '../context/products_context'
-import { single_product_url as url } from '../utils/constants'
-import { formatPrice } from '../utils/helpers'
+import React, { useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { useProductsContext } from "../context/products_context";
+import { single_product_url as url } from "../utils/constants";
+import { formatPrice } from "../utils/helpers";
 import {
   Loading,
   Error,
@@ -10,13 +10,75 @@ import {
   AddToCart,
   Stars,
   PageHero,
-} from '../components'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+} from "../components";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import ErrorPage from "./ErrorPage";
 
 const SingleProductPage = () => {
-  return <h4>single product page</h4>
-}
+  // acesing our params
+  const { id } = useParams();
+  const {
+    single_product: product,
+    single_product_loading: loading,
+    // single_product_error: error,
+    single_product_error: error,
+    fetchSingleProduct,
+  } = useProductsContext();
+  useEffect(() => {
+    // passing single product url
+    fetchSingleProduct(`${url}${id}`);
+  }, [id]);
+  console.log(product);
+  if (loading) return <Loading />;
+  console.log(error);
+  if (error) return <Error />;
+  const {
+    name,
+    price,
+    id: sku,
+    stock,
+    stars,
+    reviews,
+    images,
+    description,
+    company,
+    colors,
+  } = product;
+  // console.log(stars);
+
+  return (
+    <Wrapper>
+      <PageHero title={name} product={product} />
+      <div className="section section-center page">
+        <div className="product-center">
+          <ProductImages images={images} />
+          <section className="content">
+            <h2>{name}</h2>
+            <Stars stars={stars} reviews={reviews} />
+            <h5 className="price">{`${price}`}</h5>
+            <p className="desc">{description}</p>
+            <p className="info">
+              <span>Availabe</span>
+              {stock < 0 ? "out of stock" : "in stock"}
+            </p>
+            <p className="info">
+              <span>sku</span>
+              {sku}
+            </p>
+            <p className="info">
+              <span>Brand</span>
+              {company || "unknown"}
+            </p>
+            <hr />
+            {/*  */}
+            {stock > 0 && <AddToCart product={product}  />}
+          </section>
+        </div>
+      </div>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.main`
   .product-center {
@@ -50,6 +112,6 @@ const Wrapper = styled.main`
       font-size: 1.25rem;
     }
   }
-`
+`;
 
-export default SingleProductPage
+export default SingleProductPage;

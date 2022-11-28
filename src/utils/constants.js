@@ -21,6 +21,7 @@ export const links = [
 export const services = [
   {
     id: 1,
+    // because of icon we need to import react from react in this file or it can cause future bugs
     icon: <GiCompass />,
     title: 'mission',
     text:

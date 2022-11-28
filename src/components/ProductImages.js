@@ -1,9 +1,29 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-
-const ProductImages = () => {
-  return <h4>product images</h4>
-}
+import React, { useState } from "react";
+import styled from "styled-components";
+// setting default props always use if you are excepting something from an api
+const ProductImages = ({ images = [{ url: "" }] }) => {
+  console.log(images);
+  const [state, setstate] = useState(images[0]);
+  return (
+    <Wrapper>
+      <img src={state.url} alt="" />
+      <div className="gallery">
+        {images.map((image, index) => {
+          return (
+            <img
+              className={`${image.url === state.url ? "active" : ""}`}
+              src={image.url}
+              key={index}
+              onClick={() => {
+                setstate(images[index]);
+              }}
+            ></img>
+          );
+        })}
+      </div>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.section`
   .main {
@@ -48,6 +68,6 @@ const Wrapper = styled.section`
       }
     }
   }
-`
+`;
 
-export default ProductImages
+export default ProductImages;
