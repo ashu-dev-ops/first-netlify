@@ -11,12 +11,13 @@ import { Link } from "react-router-dom";
 
 const Nav = () => {
   const { opendSideBar } = useProductsContext();
+  const { myUser } = useUserContext();
   return (
     <NavContainer>
       <div className="nav-center">
         <div className="nav-header">
           <Link to="/">
-            <img src={logo}></img>
+            <img src={logo} alt="main_logo"></img>
           </Link>
           <button>
             <div className="nav-toggle" onClick={() => opendSideBar()}>
@@ -33,8 +34,13 @@ const Nav = () => {
               </li>
             );
           })}
+          {myUser && (
+            <li>
+              <Link to="/checkout">check out</Link>
+            </li>
+          )}
         </ul>
-        <CartButtons  />
+        <CartButtons />
       </div>
     </NavContainer>
   );

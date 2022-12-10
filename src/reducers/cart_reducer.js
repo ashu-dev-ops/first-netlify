@@ -4,12 +4,133 @@ import {
   COUNT_CART_TOTALS,
   REMOVE_CART_ITEM,
   TOGGLE_CART_ITEM_AMOUNT,
-} from '../actions'
+} from "../actions";
 
 const cart_reducer = (state, action) => {
- 
-  return state
-  throw new Error(`No Matching "${action.type}" - action type`)
-}
+  if (action.type === ADD_TO_CART) {
+    const { id, color, amount, product } = action.payload;
+    // console.log(action.payload);
+    let tempItem = state.cart.find((i) => i.id === id + color);
+    // how we are getting tempItem
+    if (tempItem) {
+      //if item exsist in the cart
+      // imcresing quantity if an exsisting item
+      const tempCart = state.cart.map((cartItem) => {
+        if (cartItem === id + color) {
+          let newAmount = newAmount + amount;
+          if (newAmount > cartItem.max) {
+            newAmount = cartItem.max;
+          }
+          return { ...cartItem, amount: newAmount };
+        } else {
+          return cartItem;
+        }
+      });
+      return { ...state, cart: tempCart };
+    } else {
+      // adding new item or if item dont exist in the cart
+      const newItem = {
+        id: id + color,
+        name: product.name,
+        color,
+        amount,
+        image: product.images[0].url,
+        price: product.price,
+        max: product.stock,
+      };
+      return { ...state, cart: [...state.cart, newItem] };
+    }
+  }
+  // if (action.type === REMOVE_CART_ITEM) {
+  //   const tempCart = state.cart.filter((i) => i.id !== action.payload);
+  //   return { ...state, cart: tempCart };
+  // }
 
-export default cart_reducer
+  if (action.type === REMOVE_CART_ITEM) {
+    const tempCart = state.cart.filter((item) => item.id !== action.payload);
+    return { ...state, cart: tempCart };
+  }
+  // clear :easy
+  if (action.type === CLEAR_CART) {
+    return { ...state, cart: [] };
+  }
+
+  if (action.type === TOGGLE_CART_ITEM_AMOUNT) {
+    const { id, value } = action.payload;
+    //create a new amount array
+    console.log(id);
+    console.log(state.cart[0].id);
+    const tempCart = state.cart.map((i) => {
+      if (i.id === id) {
+        if (value === "inc") {
+          // console.log("increase is running");
+          let newAmount = i.amount + 1;
+          if (newAmount > i.max) {
+            newAmount = i.max;
+          }
+          console.log(newAmount);
+          return { ...i, amount: newAmount };
+        }
+        if (value === "dec") {
+          let newAmount = i.amount - 1;
+          if (newAmount < 1) {
+            newAmount = 1;
+          }
+          console.log(newAmount);
+          return { ...i, amount: newAmount };
+        }
+      }
+      return i;
+    });
+    console.log(tempCart);
+    return { ...state, cart: tempCart };
+  }
+  // if (action.type === TOGGLE_CART_ITEM_AMOUNT) {
+  //   const { id, value } = action.payload
+  //   const tempCart = state.cart.map((item) => {
+  //     if (item.id === id) {
+  //       if (value === 'inc') {
+  //         let newAmount = item.amount + 1
+  //         if (newAmount > item.max) {
+  //           newAmount = item.max
+  //         }
+  //         return { ...item, amount: newAmount }
+  //       }
+  //       if (value === 'dec') {
+  //         let newAmount = item.amount - 1
+  //         if (newAmount < 1) {
+  //           newAmount = 1
+  //         }
+  //         return { ...item, amount: newAmount }
+  //       }
+  //     }
+  //     return item
+  //   })
+
+  //   return { ...state, cart: tempCart }
+  // }
+  if (action.type === COUNT_CART_TOTALS) {
+    const { total_items, total_amount } = state.cart.reduce(
+      // we are returning an obj and destructing it
+      (total, cartItem) => {
+        const { amount, price } = cartItem;
+
+        total.total_items += amount;
+        total.total_amount += price * amount;
+        //very important to return total or first parameter
+        return total;
+      },
+      {
+        // obj inital values
+        total_items: 0,
+        total_amount: 0,
+      }
+    );
+    console.log(total_amount, total_items);
+    return { ...state, total_items: total_items, total_amount: total_amount };
+  }
+  return state;
+  throw new Error(`No Matching "${action.type}" - action type`);
+};
+
+export default cart_reducer;

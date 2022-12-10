@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { useFilterContext } from "../context/filter_context";
+// import { useFilterContext } from "../context/filter_context";
 import Product from "./Product";
 
 const GridView = ({ products }) => {
-  console.log(products);
+  // console.log(products);
   return (
     <Wrapper>
       <div className="products-container">

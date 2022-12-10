@@ -6,6 +6,7 @@ import { useCartContext } from "../context/cart_context";
 import AmountButtons from "./AmountButtons";
 
 const AddToCart = ({ product }) => {
+  const { addToCart } = useCartContext();
   const { id, colors, stock } = product;
   const [mainColor, setMainColor] = useState(colors[0]);
   // console.log(colors, id, stock);
@@ -14,6 +15,7 @@ const AddToCart = ({ product }) => {
     setAmount((oldAmount) => {
       let tempAmt = oldAmount + 1;
       if (tempAmt > stock) {
+        //check if it is grater than stock and if it than make it equal
         tempAmt = stock;
       }
       return tempAmt;
@@ -31,16 +33,6 @@ const AddToCart = ({ product }) => {
   // const decrease = () => {};
   return (
     <Wrapper>
-      <div className="btn-container">
-        <AmountButtons
-          amount={amount}
-          increase={increase}
-          decrease={decrease}
-        />
-        <Link to="/cart" className="btn">
-          add to cart
-        </Link>
-      </div>
       <div className="colors">
         <span></span>
         <div className="">
@@ -59,6 +51,24 @@ const AddToCart = ({ product }) => {
             );
           })}
         </div>
+      </div>
+      <div className="btn-container">
+        <AmountButtons
+          amount={amount}
+          increase={increase}//simple call -no parameter
+          decrease={decrease}
+        />
+        <Link
+          to="/cart"
+          className="btn"
+          
+          onClick={() => addToCart(id, mainColor, amount, product)} 
+          //call back if parameter
+
+          
+        >
+          add to cart
+        </Link>
       </div>
     </Wrapper>
   );

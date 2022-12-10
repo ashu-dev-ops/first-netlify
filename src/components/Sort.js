@@ -8,11 +8,13 @@ const Sort = () => {
     filtered_products: products,
     setGridView,
     setListView,
+    updateSort,
+    sort,
   } = useFilterContext();
   const hc = () => {
     console.log("hi");
   };
-  console.log(setGridView);
+  // console.log(setGridView);
   return (
     <Wrapper>
       <div className="btn-container">
@@ -37,7 +39,8 @@ const Sort = () => {
       <hr />
       <form>
         <label htmlFor="sort">sort by</label>
-        <select name="sort" id="sort">
+        {/* while passing target values just pass the function name and dont call it  */}
+        <select name="sort" id="sort" onChange={updateSort} value={sort}>
           <option value="price-lowest">price(lowest)</option>
           <option value="price-heighest">price(highest)</option>
           <option value="name-a">name(A-Z)</option>

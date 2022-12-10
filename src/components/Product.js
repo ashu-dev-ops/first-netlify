@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const Product = ({ id, name, price, image }) => {
   return (
+    // working like a card
     <Wrapper>
       <div className="container">
         {/* <img src={image} alt="sxz" /> */}
@@ -17,7 +18,7 @@ const Product = ({ id, name, price, image }) => {
       </div>
       <footer>
         <h5>{name}</h5>
-        <h5>{price}</h5>
+        <h5>{formatPrice(price)}</h5>
       </footer>
     </Wrapper>
   );

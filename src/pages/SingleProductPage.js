@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useProductsContext } from "../context/products_context";
 import { single_product_url as url } from "../utils/constants";
 import { formatPrice } from "../utils/helpers";
@@ -18,6 +18,7 @@ import ErrorPage from "./ErrorPage";
 const SingleProductPage = () => {
   // acesing our params
   const { id } = useParams();
+  const navigate = useNavigate();
   const {
     single_product: product,
     single_product_loading: loading,
@@ -29,6 +30,14 @@ const SingleProductPage = () => {
     // passing single product url
     fetchSingleProduct(`${url}${id}`);
   }, [id]);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
+  }, [error]);
   console.log(product);
   if (loading) return <Loading />;
   console.log(error);
@@ -71,8 +80,8 @@ const SingleProductPage = () => {
               {company || "unknown"}
             </p>
             <hr />
-            {/*  */}
-            {stock > 0 && <AddToCart product={product}  />}
+            {/*add to cart handle number of items,color,etc  */}
+            {stock > 0 && <AddToCart product={product} />}
           </section>
         </div>
       </div>

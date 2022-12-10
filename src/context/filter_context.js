@@ -17,7 +17,17 @@ const initialState = {
   all_products: [], //this will remian unchanged
   grid_view: true,
   list_view: false,
-  sort: "price-lowest",
+  sort: "price-lowest", //it needs to match one of the options in sort seclect tag
+  filters: {
+    text: "",
+    company: "all",
+    category: "all",
+    color: "all",
+    min_price: 0,
+    max_price: 0,
+    price: 0,
+    shipping: false,
+  },
 };
 
 const FilterContext = React.createContext();
@@ -35,6 +45,15 @@ export const FilterProvider = ({ children }) => {
     // since initially products going to be undefine even in product context
     [products]
   );
+
+  useEffect(() => {
+    dispatch({
+      type: SORT_PRODUCTS,
+    });
+    // products=>initial mount eg lowest-highest
+    // state.sort=>when we change sort value
+  }, [products, state.sort]);
+
   const setGridView = () => {
     dispatch({
       type: SET_GRIDVIEW,
@@ -48,14 +67,86 @@ export const FilterProvider = ({ children }) => {
     });
   };
   const updateSort = (e) => {
-    console.log(e.target.name);
+    // linking our value of sort/select tag with the state
     const name = e.target.name;
-    const value = e.target.value;
-    
+    const value = e.target.value; //value inside our oprtion tag inside select tag
+    console.log(`value is ${value}`);
+    dispatch({
+      type: UPDATE_SORT,
+      payload: value,
+    });
+  };
+  //
+  const updateFilters = (e) => {
+    // linking filter inputs with state so any change in filter will fire this dispatch and our use effect of filter products
+    let name = e.target.name;
+    let value = e.target.value;
+    // if (name === 'category') {
+    // we access an value inside any tag but button by default have value attribute
+    //   value = e.target.textContent
+    // }
+
+    // using data attribute
+    // first we check name then change the value according the data attribute we get
+    // if (name === "color") {
+    //   value = e.target.dataset.color;
+    // }
+    if (name === "price") {
+      // by deafult range input string
+      value = Number(e.target.value);
+    }
+
+    if (name === "shipping") {
+      // access check box values
+      value = e.target.checked;
+    }
+    console.log(name, value);
+    dispatch({
+      type: UPDATE_FILTERS,
+      payload: { name, value },
+    });
+    // console.log(state.filters.color);
   };
 
+  //running use effect to run the logic when your hooked state values change their values
+  useEffect(
+    () => {
+      dispatch({
+        type: FILTER_PRODUCTS,
+        // updating list
+      });
+      dispatch({
+        type: SORT_PRODUCTS,
+        // updating list
+      });
+      // after every filter we also have sort that list according to selected sort value
+      // dispatch({
+      //   type: UPDATE_SORT,
+
+      //   // sorting updated list
+      // });
+    },
+    // fire this on initial mount
+    // any change happen in filters object
+    // if value of sort changes
+    [products, state.filters, state.sort]
+  );
+  const clearFilters = () => {
+    dispatch({
+      type: CLEAR_FILTERS,
+    });
+  };
   return (
-    <FilterContext.Provider value={{ ...state, setGridView, setListView }}>
+    <FilterContext.Provider
+      value={{
+        ...state,
+        setGridView,
+        setListView,
+        updateSort,
+        updateFilters,
+        clearFilters,
+      }}
+    >
       {children}
     </FilterContext.Provider>
   );

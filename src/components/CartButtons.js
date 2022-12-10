@@ -8,6 +8,8 @@ import { useUserContext } from "../context/user_context";
 
 const CartButtons = () => {
   const { closeSideBar } = useProductsContext();
+  const { total_items } = useCartContext();
+  const { logout, loginWithRedirect, myUser } = useUserContext();
   return (
     <Wrapper className="cart-btn-wrapper">
       {/* this class is define in navbar,js */}
@@ -15,12 +17,47 @@ const CartButtons = () => {
         Cart
         <span className="cart-container">
           <FaShoppingCart />
-          <span className="cart-value">12</span>
+          <span className="cart-value">{total_items}</span>
         </span>
       </Link>
-      <button className="auth-btn"  onClick={() => closeSideBar()}>
-        login <FaUserPlus />
-      </button>
+      {/* {myUser ? (
+        <button
+          className="auth-btn"
+          onClick={() => logout({ returnTo: window.location.origin })}
+        >
+          logout <FaUserPlus />
+        </button>
+      ) : (
+        <button className="auth-btn" onClick={loginWithRedirect}>
+          login <FaUserPlus />
+        </button>
+      )} */}
+      {myUser ? (
+        <button
+          type="button"
+          className="auth-btn"
+          onClick={() => {
+            // clearCart();
+            // localStorage.removeItem('user')
+            logout({ returnTo: window.location.origin });
+          }}
+        >
+          Logout <FaUserMinus />
+        </button>
+      ) : (
+        <button type="button" className="auth-btn" onClick={loginWithRedirect}>
+          Login <FaUserPlus />
+        </button>
+      )}
+      {/* <button
+        className="auth-btn"
+        onClick={() => logout({ returnTo: window.location.origin })}
+      >
+        logout <FaUserPlus />
+      </button> */}
+      {/* <button type="button" className="auth-btn" onClick={loginWithRedirect}>
+        Login <FaUserPlus />
+      </button> */}
     </Wrapper>
   );
 };

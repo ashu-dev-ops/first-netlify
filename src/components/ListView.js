@@ -9,12 +9,15 @@ const ListView = ({ products }) => {
         const { id, image, name, price, description } = product;
         return (
           <article key={id}>
-            <img src={image} alt="" srcset="" />
+            <img src={image} alt="list" />
             <div className="">
               <h4>{name}</h4>
-              <h5>{price}</h5>
+              <h5>{formatPrice(price)}</h5>
               <p>{description.substring(0, 150)}...</p>
-              {/* setting up dynamic link for a page */}
+              {/* setting up dynamic link for a page  */}
+              {/* <Route exact path="/products/:id">
+                  <SingleProduct />
+                  </Route> */}
               <Link to={`/products/${id}`} className="btn">
                 Details
               </Link>

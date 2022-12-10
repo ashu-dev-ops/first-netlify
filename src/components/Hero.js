@@ -18,8 +18,8 @@ const Hero = () => {
         <Link to="/products" className="btn hero-btn">shop now</Link>
       </article>
       <article className="img-container"> 
-      <img src={heroBcg} className="main-img"/>
-      <img src={heroBcg2} className="accent-img"/>
+      <img src={heroBcg} alt="m" className="main-img"/>
+      <img src={heroBcg2} alt="m" className="accent-img"/>
 
       </article>
     </Wrapper>
